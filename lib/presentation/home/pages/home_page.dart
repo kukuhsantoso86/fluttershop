@@ -64,10 +64,14 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('kukuh1986 Store'),
         actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Assets.icons.notification.svg(height: 24.0),
+          ),
           BlocBuilder<CheckoutBloc, CheckoutState>(
             builder: (context, state) {
               return state.maybeWhen(
-                loaded: (checkout) {
+                loaded: (checkout, _, __, ___, ____, _____) {
                   final totalQuantity = checkout.fold<int>(
                     0,
                     (previousValue, element) =>
@@ -103,10 +107,7 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
-          IconButton(
-            onPressed: () {},
-            icon: Assets.icons.notification.svg(height: 24.0),
-          ),
+          const SizedBox(width: 16.0),
         ],
       ),
       body: ListView(

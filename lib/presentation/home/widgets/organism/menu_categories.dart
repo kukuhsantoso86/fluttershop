@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttershop/core/constants/variables.dart';
 
 import '../../../../core/core.dart';
 import '../../bloc/category/category_bloc.dart';
@@ -30,7 +31,7 @@ class _MenuCategoriesState extends State<MenuCategories> {
               ...categories.map(
                 (category) => Flexible(
                   child: CategoryButton(
-                    imagePath: category.image!,
+                    imagePath: '${Variables.baseUrlImage1}${category.image!}',
                     label: category.name!,
                     onPressed: () {},
                   ),

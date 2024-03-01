@@ -1,18 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttershop/data/datasources/address_remote_datasource.dart';
+import 'package:fluttershop/data/datasources/auth_remote_datasource.dart';
 import 'package:fluttershop/data/datasources/category_remote_datasource.dart';
+import 'package:fluttershop/data/datasources/order_remote_datasource.dart';
 import 'package:fluttershop/data/datasources/product_remote_datasource.dart';
+import 'package:fluttershop/data/datasources/rajaongkir_remote_datasource.dart';
+import 'package:fluttershop/presentation/address/bloc/add_address/add_address_bloc.dart';
+import 'package:fluttershop/presentation/address/bloc/address/address_bloc.dart';
+import 'package:fluttershop/presentation/address/bloc/city/city_bloc.dart';
+import 'package:fluttershop/presentation/address/bloc/province/province_bloc.dart';
+import 'package:fluttershop/presentation/address/bloc/subdistrict/subdistrict_bloc.dart';
+import 'package:fluttershop/presentation/auth/bloc/login/login_bloc.dart';
+import 'package:fluttershop/presentation/auth/bloc/logout/logout_bloc.dart';
 import 'package:fluttershop/presentation/home/bloc/all_product/all_product_bloc.dart';
 import 'package:fluttershop/presentation/home/bloc/best_seller_product/best_seller_product_bloc.dart';
 import 'package:fluttershop/presentation/home/bloc/checkout/checkout_bloc.dart';
 import 'package:fluttershop/presentation/home/bloc/special_offer_product/special_offer_product_bloc.dart';
+import 'package:fluttershop/presentation/orders/bloc/cost/cost_bloc.dart';
+import 'package:fluttershop/presentation/orders/bloc/history_order/history_order_bloc.dart';
+import 'package:fluttershop/presentation/orders/bloc/order/order_bloc.dart';
+import 'package:fluttershop/presentation/orders/bloc/order_detail/order_detail_bloc.dart';
+import 'package:fluttershop/presentation/orders/bloc/status_order/status_order_bloc.dart';
+import 'package:fluttershop/presentation/orders/bloc/tracking/tracking_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'core/constants/colors.dart';
 import 'core/router/app_router.dart';
+import 'data/datasources/firebase_messaging_remote_datasource.dart';
 import 'presentation/home/bloc/category/category_bloc.dart';
 
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await FirebaseMessagingRemoteDatasource().initialize();
   runApp(const MyApp());
 }
 
@@ -41,8 +67,48 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => CheckoutBloc(),
         ),
+        BlocProvider(
+          create: (context) => LoginBloc(AuthRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => LogoutBloc(AuthRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => AddressBloc(AddressRemoteDataSource()),
+        ),
+        BlocProvider(
+          create: (context) => AddAddressBloc(AddressRemoteDataSource()),
+        ),
+        BlocProvider(
+          create: (context) => ProvinceBloc(RajaongkirRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => CityBloc(RajaongkirRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => SubdistrictBloc(RajaongkirRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => CostBloc(RajaongkirRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => TrackingBloc(RajaongkirRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => OrderBloc(OrderRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => StatusOrderBloc(OrderRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => HistoryOrderBloc(OrderRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => OrderDetailBloc(OrderRemoteDatasource()),
+        ),
       ],
       child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
